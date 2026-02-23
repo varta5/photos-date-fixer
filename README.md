@@ -5,3 +5,13 @@ Have a bunch of nice photos with incorrect date or time stored in its metadata? 
 Change the date and time metadata of all the photos in a directory.
 
 This project is under development!
+
+## Usage
+
+Run the fix_dates.py with Python interpreter:
+
+```shell
+python fix_dates.py
+```
+
+The script counts the number of files in the current directory.
