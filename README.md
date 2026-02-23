@@ -14,4 +14,4 @@ Run the fix_dates.py with Python interpreter:
 python fix_dates.py
 ```
 
-The script counts the number of files in the current directory.
+The script counts the number of photo files (\*.jpg or \*.jpeg) in the current directory.
