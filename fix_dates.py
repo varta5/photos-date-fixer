@@ -22,15 +22,15 @@ if __name__ == "__main__":
     latest_datetime = None
     for filename in filenames:
         datetime_string, datetime_original, datetime_digitized = ExifServices.get_exif_dates(filename)
-        if datetime_string == datetime_original and datetime_string == datetime_digitized:
-            filenames_to_process.append(filename)
-            datetime = dt.datetime.strptime(datetime_string, EXIF_DATE_FORMAT)
-            if not earliest_datetime or datetime < earliest_datetime:
-                earliest_datetime = datetime
-            if not latest_datetime or datetime > latest_datetime:
-                latest_datetime = datetime
-        else:
+        if datetime_string != datetime_original or datetime_string != datetime_digitized:
             print(f"{filename} has different datetime among its exif metadata: datetime, datetime_original, datetime_digitized - will not process it")
+            continue
+        filenames_to_process.append(filename)
+        datetime = dt.datetime.strptime(datetime_string, EXIF_DATE_FORMAT)
+        if not earliest_datetime or datetime < earliest_datetime:
+            earliest_datetime = datetime
+        if not latest_datetime or datetime > latest_datetime:
+            latest_datetime = datetime
     print(f"Current directory contains {len(filenames_to_process)} photo files where the datetime exif metadata are consistent.")
     print(f"Earliest datetime in the photos: {earliest_datetime}")
     print(f"Latest datetime in the photos: {latest_datetime}")
