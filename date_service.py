@@ -12,9 +12,9 @@ class DateService:
         return available_years
 
     def get_months_descending(self):
-        available_months = list(range(1, 13))
-        available_months.reverse()
-        return available_months
+        month_numbers = list(range(1, 13))
+        month_numbers.reverse()
+        return [(f'{month_number:02d} - {self.datetime_now.replace(month=month_number).strftime("%b")}', month_number) for month_number in month_numbers]
 
     def get_days_descending(self):
         available_days = list(range(1, 32))
