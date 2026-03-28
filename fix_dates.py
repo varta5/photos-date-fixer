@@ -1,6 +1,7 @@
 from os import listdir
 from os.path import isfile
 
+from date_service import DateService
 from exif_services import ExifServices
 
 import datetime as dt
@@ -13,15 +14,15 @@ def get_file_extension(filename):
     filename_split = filename.lstrip(".").split(".")
     return filename_split.pop() if len(filename_split) >= 2 else ""
 
-def get_desired_datetime_from_user():
+def get_desired_datetime_from_user(date_service):
     """return datetime of the desired datetime (entered interactively on CLI, based on original_datetime)"""
     questions = [
-        inquirer.List("year", message="Select year", choices=[2022, 2023, 2024, 2025, 2026]),
-        inquirer.List("month", message="Select month", choices=list(range(1, 13))),
-        inquirer.List("day", message="Select day of month", choices=list(range(1, 32))),
-        inquirer.List("hour", message="Select hour", choices=list(range(24))),
-        inquirer.List("minute", message="Select minute", choices=list(range(60))),
-        inquirer.List("second", message="Select second", choices=list(range(60)))
+        inquirer.List("year", message="Select year", choices=date_service.get_available_years_descending()),
+        inquirer.List("month", message="Select month", choices=date_service.get_months_descending()),
+        inquirer.List("day", message="Select day of month", choices=date_service.get_days_descending()),
+        inquirer.List("hour", message="Select hour", choices=date_service.get_hours_descending()),
+        inquirer.List("minute", message="Select minute", choices=date_service.get_minutes_or_seconds_descending()),
+        inquirer.List("second", message="Select second", choices=date_service.get_minutes_or_seconds_descending())
     ]
     answers = inquirer.prompt(questions)
     target_datetime = dt.datetime(
@@ -56,7 +57,8 @@ if __name__ == "__main__":
     print(f"Current directory contains {len(filenames_to_process)} photo files where the datetime exif metadata are consistent.")
     print(f"Earliest datetime in the photos: {earliest_datetime}")
     print(f"Latest datetime in the photos: {latest_datetime}")
-    target_datetime_of_latest_photo = get_desired_datetime_from_user()
+    date_service = DateService()
+    target_datetime_of_latest_photo = get_desired_datetime_from_user(date_service)
     datetime_delta = target_datetime_of_latest_photo - latest_datetime
     print(f"Selected datetime delta: {datetime_delta}")
     print(f"Datetime change of earliest photo: {earliest_datetime} --> {earliest_datetime + datetime_delta}")
