@@ -12,6 +12,28 @@ def get_file_extension(filename):
     filename_split = filename.lstrip(".").split(".")
     return filename_split.pop() if len(filename_split) >= 2 else ""
 
+def get_desired_datetime_from_user():
+    """return datetime of the desired datetime (entered interactively on CLI, based on original_datetime)"""
+    target_datetime_properties = {
+        "year": 0,
+        "month": 0,
+        "day": 0,
+        "hour": 0,
+        "minute": 0,
+        "second": 0
+    }
+    for prop in target_datetime_properties:
+        target_datetime_properties[prop] = int(input(f"Please enter desired {prop}:"))
+    target_datetime = dt.datetime(
+        year=target_datetime_properties["year"],
+        month=target_datetime_properties["month"],
+        day=target_datetime_properties["day"],
+        hour=target_datetime_properties["hour"],
+        minute=target_datetime_properties["minute"],
+        second=target_datetime_properties["second"]
+    )
+    return target_datetime
+
 if __name__ == "__main__":
     directories_and_files = listdir()
     filenames = [element for element in directories_and_files if isfile(element) and get_file_extension(element.lower()) in PHOTO_FILE_EXTENSIONS]
@@ -34,3 +56,5 @@ if __name__ == "__main__":
     print(f"Current directory contains {len(filenames_to_process)} photo files where the datetime exif metadata are consistent.")
     print(f"Earliest datetime in the photos: {earliest_datetime}")
     print(f"Latest datetime in the photos: {latest_datetime}")
+    target_datetime = get_desired_datetime_from_user()
+    datetime_delta = target_datetime - latest_datetime
