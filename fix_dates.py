@@ -14,24 +14,21 @@ def get_file_extension(filename):
     filename_split = filename.lstrip(".").split(".")
     return filename_split.pop() if len(filename_split) >= 2 else ""
 
-def get_desired_datetime_from_user(date_service):
+def get_desired_datetime_from_user(date_service, original_datetime):
     """return datetime of the desired datetime (entered interactively on CLI, based on original_datetime)"""
-    questions = [
-        inquirer.List("year", message="Select year", choices=date_service.get_available_years_descending()),
-        inquirer.List("month", message="Select month", choices=date_service.get_months_descending()),
-        inquirer.List("day", message="Select day of month", choices=date_service.get_days_descending()),
-        inquirer.List("hour", message="Select hour", choices=date_service.get_hours_descending()),
-        inquirer.List("minute", message="Select minute", choices=date_service.get_minutes_or_seconds_descending()),
-        inquirer.List("second", message="Select second", choices=date_service.get_minutes_or_seconds_descending())
-    ]
-    answers = inquirer.prompt(questions)
+    target_year = inquirer.list_input(f"Select desired year: {original_datetime} --> ????-__-__ __:__:__", choices=date_service.get_available_years_descending())
+    target_month = inquirer.list_input(f"Select desired month: {original_datetime} --> {target_year}-??-__ __:__:__", choices=date_service.get_months_descending())
+    target_day = inquirer.list_input(f"Select desired day: {original_datetime} --> {target_year}-{target_month:02d}-?? __:__:__", choices=date_service.get_days_descending())
+    target_hour = inquirer.list_input(f"Select desired hour: {original_datetime} --> {target_year}-{target_month:02d}-{target_day:02d} ??:__:__", choices=date_service.get_hours_descending())
+    target_minute = inquirer.list_input(f"Select desired minute: {original_datetime} --> {target_year}-{target_month:02d}-{target_day:02d} {target_hour:02d}:??:__", choices=date_service.get_minutes_or_seconds_descending())
+    target_second = inquirer.list_input(f"Select desired second: {original_datetime} --> {target_year}-{target_month:02d}-{target_day:02d} {target_hour:02d}:{target_minute:02d}:??", choices=date_service.get_minutes_or_seconds_descending())
     target_datetime = dt.datetime(
-        year=answers["year"],
-        month=answers["month"],
-        day=answers["day"],
-        hour=answers["hour"],
-        minute=answers["minute"],
-        second=answers["second"]
+        year=target_year,
+        month=target_month,
+        day=target_day,
+        hour=target_hour,
+        minute=target_minute,
+        second=target_second
     )
     return target_datetime
 
@@ -58,7 +55,7 @@ if __name__ == "__main__":
     print(f"Earliest datetime in the photos: {earliest_datetime}")
     print(f"Latest datetime in the photos: {latest_datetime}")
     date_service = DateService()
-    target_datetime_of_latest_photo = get_desired_datetime_from_user(date_service)
+    target_datetime_of_latest_photo = get_desired_datetime_from_user(date_service, latest_datetime)
     datetime_delta = target_datetime_of_latest_photo - latest_datetime
     print(f"Selected datetime delta: {datetime_delta}")
     print(f"Datetime change of earliest photo: {earliest_datetime} --> {earliest_datetime + datetime_delta}")
