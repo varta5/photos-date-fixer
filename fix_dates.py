@@ -16,12 +16,12 @@ def get_file_extension(filename):
 
 def get_desired_datetime_from_user(date_service, original_datetime):
     """return datetime of the desired datetime (entered interactively on CLI, based on original_datetime)"""
-    target_year = inquirer.list_input(f"Select desired year: {original_datetime} --> ????-__-__ __:__:__", choices=date_service.get_available_years_descending())
-    target_month = inquirer.list_input(f"Select desired month: {original_datetime} --> {target_year}-??-__ __:__:__", choices=date_service.get_months_descending())
-    target_day = inquirer.list_input(f"Select desired day: {original_datetime} --> {target_year}-{target_month:02d}-?? __:__:__", choices=date_service.get_days_descending())
-    target_hour = inquirer.list_input(f"Select desired hour: {original_datetime} --> {target_year}-{target_month:02d}-{target_day:02d} ??:__:__", choices=date_service.get_hours_descending())
-    target_minute = inquirer.list_input(f"Select desired minute: {original_datetime} --> {target_year}-{target_month:02d}-{target_day:02d} {target_hour:02d}:??:__", choices=date_service.get_minutes_or_seconds_descending())
-    target_second = inquirer.list_input(f"Select desired second: {original_datetime} --> {target_year}-{target_month:02d}-{target_day:02d} {target_hour:02d}:{target_minute:02d}:??", choices=date_service.get_minutes_or_seconds_descending())
+    target_year = inquirer.list_input(f"Select desired year: {original_datetime} --> ????-__-__ __:__:__", choices=date_service.get_available_years_descending(), default=original_datetime.year)
+    target_month = inquirer.list_input(f"Select desired month: {original_datetime} --> {target_year}-??-__ __:__:__", choices=date_service.get_months_descending(), default=original_datetime.month)
+    target_day = inquirer.list_input(f"Select desired day: {original_datetime} --> {target_year}-{target_month:02d}-?? __:__:__", choices=date_service.get_days_descending(), default=original_datetime.day)
+    target_hour = inquirer.list_input(f"Select desired hour: {original_datetime} --> {target_year}-{target_month:02d}-{target_day:02d} ??:__:__", choices=date_service.get_hours_descending(), default=original_datetime.hour)
+    target_minute = inquirer.list_input(f"Select desired minute: {original_datetime} --> {target_year}-{target_month:02d}-{target_day:02d} {target_hour:02d}:??:__", choices=date_service.get_minutes_or_seconds_descending(), default=original_datetime.minute)
+    target_second = inquirer.list_input(f"Select desired second: {original_datetime} --> {target_year}-{target_month:02d}-{target_day:02d} {target_hour:02d}:{target_minute:02d}:??", choices=date_service.get_minutes_or_seconds_descending(), default=original_datetime.second)
     target_datetime = dt.datetime(
         year=target_year,
         month=target_month,
