@@ -14,7 +14,7 @@ class DateService:
     def get_months_descending(self):
         month_numbers = list(range(1, 13))
         month_numbers.reverse()
-        return [(f'{month_number:02d} - {self.datetime_now.replace(month=month_number).strftime("%b")}', month_number) for month_number in month_numbers]
+        return [(f'{month_number:02d} - {self.datetime_now.replace(month=month_number, day=1).strftime("%b")}', month_number) for month_number in month_numbers]
 
     def get_days_descending(self):
         days = list(range(1, 32))
