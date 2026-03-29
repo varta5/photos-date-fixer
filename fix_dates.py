@@ -33,6 +33,7 @@ def get_desired_datetime_from_user(date_service, original_datetime):
     return target_datetime
 
 def create_new_file_with_modified_exif(filename, datetime_delta, target_directory):
+    """filename in target directory is the same as original filename, exif datetime properties get increased by datetime_delta"""
     image = ExifServices.get_image(filename)
     original_datetime = image.datetime
     modified_datetime_string = date_service.get_modified_datetime_string(original_datetime, EXIF_DATE_FORMAT, datetime_delta)
