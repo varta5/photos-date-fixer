@@ -32,6 +32,16 @@ def get_desired_datetime_from_user(date_service, original_datetime):
     )
     return target_datetime
 
+def create_new_file_with_modified_exif(filename, datetime_delta, target_directory):
+    image = ExifServices.get_image(filename)
+    original_datetime = image.datetime
+    modified_datetime_string = date_service.get_modified_datetime_string(original_datetime, EXIF_DATE_FORMAT, datetime_delta)
+    ExifServices.set_dates(image, modified_datetime_string)
+    new_file_name = f"./{target_directory}/{filename}"
+    with open(new_file_name, "wb") as new_file:
+        new_file.write(image.get_file())
+    print(f"{filename} --> {new_file_name} === {original_datetime} --> {modified_datetime_string}")
+
 if __name__ == "__main__":
     directories_and_files = listdir()
     filenames = [element for element in directories_and_files if isfile(element) and get_file_extension(element.lower()) in PHOTO_FILE_EXTENSIONS]
@@ -63,7 +73,8 @@ if __name__ == "__main__":
     new_directory_name = f'fixed_exif_{dt.datetime.now().strftime("%Y%m%d_%H%M%S")}'
     if isdir(new_directory_name):
         raise Exception(f"Directory {new_directory_name} already exists")
-    if not inquirer.confirm(f"Proceed with creating new directory {new_directory_name} and creating photos there with the desired datetimes?"):
-        raise Exception("Exit by user")
-    mkdir(new_directory_name)
-    print(f"Directory {new_directory_name} created")
+    if inquirer.confirm(f"Proceed with creating new directory {new_directory_name} and creating photos there with the desired datetimes?"):
+        mkdir(new_directory_name)
+        print(f"Directory {new_directory_name} created")
+        for filename in filenames_to_process:
+            create_new_file_with_modified_exif(filename, datetime_delta, new_directory_name)

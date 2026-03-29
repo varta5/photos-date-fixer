@@ -30,3 +30,8 @@ class DateService:
         minutes_or_seconds = list(range(60))
         minutes_or_seconds.reverse()
         return minutes_or_seconds
+
+    def get_modified_datetime_string(self, datetime_string, format, delta):
+        datetime_to_be_modified = datetime.strptime(datetime_string, format)
+        datetime_to_be_modified += delta
+        return datetime_to_be_modified.strftime(format)
