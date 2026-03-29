@@ -1,4 +1,4 @@
-from os import listdir
+from os import listdir, mkdir
 from os.path import isdir, isfile
 
 from date_service import DateService
@@ -65,3 +65,5 @@ if __name__ == "__main__":
         raise Exception(f"Directory {new_directory_name} already exists")
     if not inquirer.confirm(f"Proceed with creating new directory {new_directory_name} and creating photos there with the desired datetimes?"):
         raise Exception("Exit by user")
+    mkdir(new_directory_name)
+    print(f"Directory {new_directory_name} created")
