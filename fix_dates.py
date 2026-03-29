@@ -1,5 +1,5 @@
 from os import listdir
-from os.path import isfile
+from os.path import isdir, isfile
 
 from date_service import DateService
 from exif_services import ExifServices
@@ -60,3 +60,8 @@ if __name__ == "__main__":
     print(f"Selected datetime delta: {datetime_delta}")
     print(f"Datetime change of earliest photo: {earliest_datetime} --> {earliest_datetime + datetime_delta}")
     print(f"Datetime change of latest photo: {latest_datetime} --> {target_datetime_of_latest_photo}")
+    new_directory_name = f'fixed_exif_{dt.datetime.now().strftime("%Y%m%d_%H%M%S")}'
+    if isdir(new_directory_name):
+        raise Exception(f"Directory {new_directory_name} already exists")
+    if not inquirer.confirm(f"Proceed with creating new directory {new_directory_name} and creating photos there with the desired datetimes?"):
+        raise Exception("Exit by user")
