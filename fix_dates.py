@@ -32,6 +32,10 @@ def get_desired_datetime_from_user(date_service, original_datetime):
     )
     return target_datetime
 
+def create_directory(directory_name):
+    mkdir(directory_name)
+    print(f"Directory {directory_name} created")
+
 def create_new_file_with_modified_exif(filename, datetime_delta, target_directory):
     """filename in target directory is the same as original filename, exif datetime properties get increased by datetime_delta"""
     image = ExifServices.get_image(filename)
@@ -44,6 +48,7 @@ def create_new_file_with_modified_exif(filename, datetime_delta, target_director
     print(f"{filename} --> {new_file_name} === {original_datetime} --> {modified_datetime_string}")
 
 if __name__ == "__main__":
+
     directories_and_files = listdir()
     filenames = [element for element in directories_and_files if isfile(element) and get_file_extension(element.lower()) in PHOTO_FILE_EXTENSIONS]
     print(f"Current directory contains {len(filenames)} files with any of the extensions {PHOTO_FILE_EXTENSIONS}.")
@@ -65,17 +70,18 @@ if __name__ == "__main__":
     print(f"Current directory contains {len(filenames_to_process)} photo files where the datetime exif metadata are consistent.")
     print(f"Earliest datetime in the photos: {earliest_datetime}")
     print(f"Latest datetime in the photos: {latest_datetime}")
+
     date_service = DateService()
     target_datetime_of_latest_photo = get_desired_datetime_from_user(date_service, latest_datetime)
     datetime_delta = target_datetime_of_latest_photo - latest_datetime
     print(f"Selected datetime delta: {datetime_delta}")
     print(f"Datetime change of earliest photo: {earliest_datetime} --> {earliest_datetime + datetime_delta}")
     print(f"Datetime change of latest photo: {latest_datetime} --> {target_datetime_of_latest_photo}")
+
     new_directory_name = f'fixed_exif_{dt.datetime.now().strftime("%Y%m%d_%H%M%S")}'
     if isdir(new_directory_name):
         raise Exception(f"Directory {new_directory_name} already exists")
     if inquirer.confirm(f"Proceed with creating new directory {new_directory_name} and creating photos there with the desired datetimes?"):
-        mkdir(new_directory_name)
-        print(f"Directory {new_directory_name} created")
+        create_directory(new_directory_name)
         for filename in filenames_to_process:
             create_new_file_with_modified_exif(filename, datetime_delta, new_directory_name)
