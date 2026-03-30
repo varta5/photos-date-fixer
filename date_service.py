@@ -4,7 +4,6 @@ class DateService:
 
     def __init__(self):
         self.datetime_now = datetime.now()
-        print(self.datetime_now)
 
     def get_available_years_descending(self):
         """return list of years from current year back to 1970"""
